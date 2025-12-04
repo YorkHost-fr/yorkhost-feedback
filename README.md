@@ -1,7 +1,7 @@
 # YorkHost Community Feedback
 
 <p align="center">
-  <img src="https://yorkhost.fr/logo.png" alt="YorkHost Logo" width="200">
+  <img src="https://yorkhost.fr/images/YorkHost.svg" alt="YorkHost Logo" width="200">
 </p>
 
 <p align="center">
