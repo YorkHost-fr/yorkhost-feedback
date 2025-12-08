@@ -1,0 +1,51 @@
+name: Discord Issue Notifications
+
+on:
+  issues:
+    types: [opened, closed]
+  issue_comment:
+    types: [created]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Issue Opened
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embed-title: "Nouvelle Issue Ouverte"
+          embed-color: 5763719
+          embed-description: |
+            **Titre:** ${{ github.event.issue.title }}
+            **Auteur:** ${{ github.event.issue.user.login }}
+            **Lien:** ${{ github.event.issue.html_url }}
+
+            ${{ github.event.issue.body }}
+
+      - name: Issue Closed
+        if: github.event_name == 'issues' && github.event.action == 'closed'
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embed-title: "Issue Fermee"
+          embed-color: 15548997
+          embed-description: |
+            **Titre:** ${{ github.event.issue.title }}
+            **Fermee par:** ${{ github.event.sender.login }}
+            **Lien:** ${{ github.event.issue.html_url }}
+
+      - name: New Comment
+        if: github.event_name == 'issue_comment' && github.event.action == 'created'
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embed-title: "Nouveau Commentaire sur Issue"
+          embed-color: 3447003
+          embed-description: |
+            **Issue:** ${{ github.event.issue.title }}
+            **Auteur:** ${{ github.event.comment.user.login }}
+            **Lien:** ${{ github.event.comment.html_url }}
+
+            ${{ github.event.comment.body }}
